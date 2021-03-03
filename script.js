@@ -8,6 +8,7 @@ const todoControl = document.querySelector('.todo-control'),
     startButton = document.getElementById('add');
 
 
+let i = localStorage.length;
 
 let todoData = [
 ];
@@ -36,10 +37,8 @@ const render = function(){
             '</div>';
         if(item.completed){
             todoCompleted.append(li);
-            localStorage.setItem(li.textContent.trim(), item.completed);
         }   else {
             todoList.append(li);
-            localStorage.setItem(li.textContent.trim(), !item.completed);
         }
         const btnTodoComplete = li.querySelector('.todo-complete');
         btnTodoComplete.addEventListener('click', function(){
@@ -53,6 +52,14 @@ const render = function(){
             localStorage.removeItem(li.textContent.trim());
         });
         localStorage.setItem(li.textContent.trim(), item.completed);
+        console.log(typeof(li));
+        console.log(JSON.stringify(li));
+        let data = {
+            key: li.textContent.trim(),
+            value: item.completed
+        };
+        console.log(JSON.stringify(data));
+        localStorage.setItem(data.key, data.value);
     });
 };
 headerInput.addEventListener('input', function(){
