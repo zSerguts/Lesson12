@@ -7,16 +7,11 @@ const todoControl = document.querySelector('.todo-control'),
     todoRemove = document.querySelector('.todo-remove'),
     startButton = document.getElementById('add');
 
-let todoData = [];
-
-if (JSON.parse(localStorage.getItem('data') !== null)){
-    todoData = JSON.parse(localStorage.getItem('data'));
-}
-
+const todoData = JSON.parse(localStorage.getItem('data')) || [];
 const render = function(){
     todoList.textContent = '';
     todoCompleted.textContent = '';
-    todoData.forEach(function(item){
+    todoData.forEach(function(item, index){
         const li = document.createElement('li');
         li.classList.add('todo-item');
         li.innerHTML = '<span class="text-todo">' + item.value + ' </span>' +
@@ -25,7 +20,6 @@ const render = function(){
                 '<button class="todo-complete"></button>' +
             '</div>';
         if(item.completed){
-            console.log(item.completed);
             todoCompleted.append(li);
         }   else {
             todoList.append(li);
@@ -33,16 +27,20 @@ const render = function(){
         const btnTodoComplete = li.querySelector('.todo-complete');
         btnTodoComplete.addEventListener('click', function(){
             item.completed = !item.completed;
+            localStorage.setItem('data', JSON.stringify(todoData));
             render();
         });
 
         const btnTodoRemove = li.querySelector('.todo-remove');
         btnTodoRemove.addEventListener('click', function(){
-            li.remove();
+            todoData.splice(index, 1);
+            localStorage.setItem('data', JSON.stringify(todoData));
             render();
         });
     });
 };
+
+
 headerInput.addEventListener('input', function(){
     if (headerInput.value.trim() === ''){
         startButton.disabled = true;
@@ -51,18 +49,21 @@ headerInput.addEventListener('input', function(){
     }
 });
 
+
 todoControl.addEventListener('submit', function(event){
     event.preventDefault();
-    const newTodo = {
-        value: headerInput.value,
-        completed: false
-    };
-    console.log(newTodo);
-    todoData.push(newTodo);
     if (headerInput.value !== ''){
+        const newTodo = {
+            value: headerInput.value,
+            completed: false
+        };
+        todoData.push(newTodo);
         localStorage.setItem('data', JSON.stringify(todoData));
+        headerInput.value = ''; 
+        render();
+    }   else {
+        headerInput.value = '';
     }
-    headerInput.value = ''; 
     render();
 });
 render();
