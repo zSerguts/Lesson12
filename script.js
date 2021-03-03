@@ -13,15 +13,19 @@ let todoData = [
 ];
 
 for(let i=0; i<localStorage.length;i++){
-    console.log(localStorage.getItem(localStorage.key(i)));
-    let task = {value: localStorage.key(i), completed:!localStorage.getItem(localStorage.key(i))};
+    var boolean;
+    if (localStorage.getItem(localStorage.key(i)) === 'false'){
+        boolean = false;
+    }   else{
+        boolean = true;
+    }
+    let task = {value: localStorage.key(i), completed: boolean};
     todoData.push(task);
 }
 const render = function(){
     localStorage.clear();
     todoList.textContent = '';
     todoCompleted.textContent = '';
-    console.log(todoData);
     todoData.forEach(function(item){
         const li = document.createElement('li');
         li.classList.add('todo-item');
