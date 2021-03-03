@@ -58,8 +58,8 @@ const render = function(){
             key: li.textContent.trim(),
             value: item.completed
         };
+        console.log(typeof(JSON.stringify(data)));
         console.log(JSON.stringify(data));
-        localStorage.setItem(data.key, data.value);
     });
 };
 headerInput.addEventListener('input', function(){
@@ -77,7 +77,8 @@ todoControl.addEventListener('submit', function(event){
         completed: false
     };
     todoData.push(newTodo);
+    headerInput.value = ''; 
+    localStorage.setItem('data', JSON.stringify(todoData));
     render();
-    headerInput.value = '';
 });
 render();
